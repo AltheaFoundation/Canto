@@ -3,8 +3,8 @@ package csr
 import (
 	"fmt"
 
-	"github.com/Canto-Network/Canto/v2/x/csr/keeper"
-	"github.com/Canto-Network/Canto/v2/x/csr/types"
+	"github.com/Canto-Network/Canto/v5/x/csr/keeper"
+	"github.com/Canto-Network/Canto/v5/x/csr/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
