@@ -6,8 +6,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/Canto-Network/Canto/v2/testutil"
-	"github.com/Canto-Network/Canto/v2/x/vesting/types"
+	"github.com/Canto-Network/Canto/v3/testutil"
+	"github.com/Canto-Network/Canto/v3/x/vesting/types"
 	"github.com/evmos/ethermint/tests"
 )
 
