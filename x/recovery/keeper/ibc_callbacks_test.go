@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"fmt"
 
-	"github.com/Canto-Network/Canto/v2/testutil"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -17,9 +16,10 @@ import (
 	ibcgotesting "github.com/cosmos/ibc-go/v3/testing"
 	ibcmock "github.com/cosmos/ibc-go/v3/testing/mock"
 
-	"github.com/Canto-Network/Canto/v2/x/recovery/keeper"
-	"github.com/Canto-Network/Canto/v2/x/recovery/types"
-	vestingtypes "github.com/Canto-Network/Canto/v2/x/vesting/types"
+	"github.com/Canto-Network/Canto/v4/testutil"
+	"github.com/Canto-Network/Canto/v4/x/recovery/keeper"
+	"github.com/Canto-Network/Canto/v4/x/recovery/types"
+	vestingtypes "github.com/Canto-Network/Canto/v4/x/vesting/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 )
 
