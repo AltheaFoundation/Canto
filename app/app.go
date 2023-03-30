@@ -525,6 +525,7 @@ func NewCanto(
 		app.BankKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		app.TransferKeeper,
+		app.EvmKeeper,
 	)
 
 	app.TransferKeeper = ibctransferkeeper.NewKeeper(

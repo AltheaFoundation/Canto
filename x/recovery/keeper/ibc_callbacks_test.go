@@ -319,7 +319,7 @@ func (suite *KeeperTestSuite) TestOnRecvPacket() {
 
 			sp, found := suite.app.ParamsKeeper.GetSubspace(types.ModuleName)
 			suite.Require().True(found)
-			suite.app.RecoveryKeeper = keeper.NewKeeper(sp, suite.app.AccountKeeper, suite.app.BankKeeper, suite.app.IBCKeeper.ChannelKeeper, mockTransferKeeper)
+			suite.app.RecoveryKeeper = keeper.NewKeeper(sp, suite.app.AccountKeeper, suite.app.BankKeeper, suite.app.IBCKeeper.ChannelKeeper, mockTransferKeeper, suite.app.EvmKeeper)
 
 			// Fund receiver account with canto, ERC20 coins and IBC vouchers
 			testutil.FundAccount(suite.app.BankKeeper, suite.ctx, secpAddr, coins)
@@ -576,7 +576,7 @@ func (suite *KeeperTestSuite) TestOnRecvPacketFailTransfer() {
 
 			sp, found := suite.app.ParamsKeeper.GetSubspace(types.ModuleName)
 			suite.Require().True(found)
-			suite.app.RecoveryKeeper = keeper.NewKeeper(sp, suite.app.AccountKeeper, suite.app.BankKeeper, suite.app.IBCKeeper.ChannelKeeper, mockTransferKeeper)
+			suite.app.RecoveryKeeper = keeper.NewKeeper(sp, suite.app.AccountKeeper, suite.app.BankKeeper, suite.app.IBCKeeper.ChannelKeeper, mockTransferKeeper, suite.app.EvmKeeper)
 
 			// Fund receiver account with canto
 			coins := sdk.NewCoins(

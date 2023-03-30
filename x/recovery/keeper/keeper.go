@@ -26,6 +26,7 @@ type Keeper struct {
 	ics4Wrapper    porttypes.ICS4Wrapper
 	channelKeeper  types.ChannelKeeper
 	transferKeeper types.TransferKeeper
+	evmKeeper      types.EvmKeeper
 }
 
 // NewKeeper returns keeper
@@ -35,6 +36,7 @@ func NewKeeper(
 	bk types.BankKeeper,
 	ck types.ChannelKeeper,
 	tk types.TransferKeeper,
+	ek types.EvmKeeper,
 ) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -47,6 +49,7 @@ func NewKeeper(
 		bankKeeper:     bk,
 		channelKeeper:  ck,
 		transferKeeper: tk,
+		evmKeeper:      ek,
 	}
 }
 

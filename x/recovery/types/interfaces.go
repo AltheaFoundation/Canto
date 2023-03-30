@@ -1,6 +1,8 @@
 package types
 
 import (
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/evmos/ethermint/x/evm/statedb"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -38,4 +40,8 @@ type TransferKeeper interface {
 // ChannelKeeper defines the expected IBC channel keeper.
 type ChannelKeeper interface {
 	GetChannel(ctx sdk.Context, srcPort, srcChan string) (channel channeltypes.Channel, found bool)
+}
+
+type EvmKeeper interface {
+	GetAccount(ctx sdk.Context, addr common.Address) *statedb.Account
 }

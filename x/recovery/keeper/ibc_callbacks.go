@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/armon/go-metrics"
@@ -9,6 +10,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestexported "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
+	"github.com/ethereum/go-ethereum/common"
 
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	clienttypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
@@ -26,10 +28,11 @@ import (
 // ethsecp256k1 address. The expected behavior is as follows:
 //
 // First transfer from authorized source chain:
-//  - sends back IBC tokens which originated from the source chain
-//  - sends over all canto native tokens
+//   - sends back IBC tokens which originated from the source chain
+//   - sends over all canto native tokens
+//
 // Second transfer from a different authorized source chain:
-//  - only sends back IBC tokens which originated from the source chain
+//   - only sends back IBC tokens which originated from the source chain
 func (k Keeper) OnRecvPacket(
 	ctx sdk.Context,
 	packet channeltypes.Packet,
@@ -88,6 +91,26 @@ func (k Keeper) OnRecvPacket(
 	// chain for supported keys
 	if account != nil && canto.IsSupportedKey(account.GetPubKey()) {
 		return ack
+	}
+
+	if account != nil {
+		noGasCtx := ctx.WithGasMeter(sdk.NewInfiniteGasMeter()) // Avoid breaking consensus
+		// Check if the account is actually an evm contract, in which case the recovery must NOT be run
+		ethAddress := common.BytesToAddress(account.GetAddress().Bytes())
+		evmAccount := k.evmKeeper.GetAccount(noGasCtx, ethAddress)
+		if evmAccount != nil {
+			if evmAccount.IsContract() {
+				// TODO: Return a failure ACK here instead of panicking
+				panic(fmt.Sprintf(
+					"Account %v (eth address %v) is actually an EVM contract: %v (codehash %v)",
+					account.GetAddress(),
+					ethAddress,
+					evmAccount,
+					evmAccount.CodeHash,
+				))
+			}
+		}
+		// The account does not exist within the EVM, continue with the recovery
 	}
 
 	// Perform recovery to transfer the balance back to the sender bech32 address.
@@ -222,9 +245,9 @@ func (k Keeper) OnRecvPacket(
 // GetIBCDenomDestinationIdentifiers returns the destination port and channel of
 // the IBC denomination, i.e port and channel on canto for the voucher. It
 // returns an error if:
-//  - the denomination is invalid
-//  - the denom trace is not found on the store
-//  - destination port or channel ID are invalid
+//   - the denomination is invalid
+//   - the denom trace is not found on the store
+//   - destination port or channel ID are invalid
 func (k Keeper) GetIBCDenomDestinationIdentifiers(ctx sdk.Context, denom, sender string) (destinationPort, destinationChannel string, err error) {
 	ibcDenom := strings.SplitN(denom, "/", 2)
 	if len(ibcDenom) < 2 {
