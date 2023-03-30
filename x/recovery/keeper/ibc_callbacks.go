@@ -94,14 +94,11 @@ func (k Keeper) OnRecvPacket(
 	}
 
 	if account != nil {
-		cachedGas := ctx.GasMeter()
-		cachedBlockGas := ctx.BlockGasMeter()
+		cachedCtx, _ := ctx.CacheContext()
 		// Check if the account is actually an evm contract, in which case the recovery must NOT be run
 		ethAddress := common.BytesToAddress(account.GetAddress().Bytes())
-		evmAccount := k.evmKeeper.GetAccount(ctx, ethAddress)
+		evmAccount := k.evmKeeper.GetAccount(cachedCtx, ethAddress)
 		// Reset the gas after GetAccount
-		ctx = ctx.WithGasMeter(cachedGas)
-		ctx = ctx.WithBlockGasMeter(cachedBlockGas)
 		if evmAccount != nil {
 			if evmAccount.IsContract() {
 				// TODO: Return a failure ACK here instead of panicking
