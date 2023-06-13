@@ -11,11 +11,11 @@ import (
 	"github.com/evmos/ethermint/tests"
 	"github.com/stretchr/testify/mock"
 
-	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
-	clienttypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
-	ibcgotesting "github.com/cosmos/ibc-go/v3/testing"
-	ibcmock "github.com/cosmos/ibc-go/v3/testing/mock"
+	transfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v4/modules/core/04-channel/types"
+	ibcgotesting "github.com/cosmos/ibc-go/v4/testing"
+	ibcmock "github.com/cosmos/ibc-go/v4/testing/mock"
 
 	"github.com/Canto-Network/Canto/v5/x/recovery/keeper"
 	"github.com/Canto-Network/Canto/v5/x/recovery/types"

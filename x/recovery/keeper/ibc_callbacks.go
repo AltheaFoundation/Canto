@@ -10,11 +10,11 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestexported "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
 
-	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
-	clienttypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
-	host "github.com/cosmos/ibc-go/v3/modules/core/24-host"
-	"github.com/cosmos/ibc-go/v3/modules/core/exported"
+	transfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v4/modules/core/04-channel/types"
+	host "github.com/cosmos/ibc-go/v4/modules/core/24-host"
+	"github.com/cosmos/ibc-go/v4/modules/core/exported"
 
 	"github.com/Canto-Network/Canto/v5/ibc"
 	canto "github.com/Canto-Network/Canto/v5/types"
@@ -26,10 +26,11 @@ import (
 // ethsecp256k1 address. The expected behavior is as follows:
 //
 // First transfer from authorized source chain:
-//  - sends back IBC tokens which originated from the source chain
-//  - sends over all canto native tokens
+//   - sends back IBC tokens which originated from the source chain
+//   - sends over all canto native tokens
+//
 // Second transfer from a different authorized source chain:
-//  - only sends back IBC tokens which originated from the source chain
+//   - only sends back IBC tokens which originated from the source chain
 func (k Keeper) OnRecvPacket(
 	ctx sdk.Context,
 	packet channeltypes.Packet,
@@ -50,7 +51,7 @@ func (k Keeper) OnRecvPacket(
 	// Get addresses in `canto1` and the original bech32 format
 	sender, recipient, senderBech32, recipientBech32, err := ibc.GetTransferSenderRecipient(packet)
 	if err != nil {
-		return channeltypes.NewErrorAcknowledgement(err.Error())
+		return channeltypes.NewErrorAcknowledgement(err)
 	}
 
 	// return error ACK if the address is on the deny list
@@ -60,7 +61,7 @@ func (k Keeper) OnRecvPacket(
 				types.ErrBlockedAddress,
 				"sender (%s) or recipient (%s) address are in the deny list for sending and receiving transfers",
 				senderBech32, recipientBech32,
-			).Error(),
+			),
 		)
 	}
 
@@ -162,7 +163,7 @@ func (k Keeper) OnRecvPacket(
 			sdkerrors.Wrapf(
 				err,
 				"failed to recover IBC vouchers back to sender '%s' in the corresponding IBC chain", senderBech32,
-			).Error(),
+			),
 		)
 	}
 
@@ -222,9 +223,9 @@ func (k Keeper) OnRecvPacket(
 // GetIBCDenomDestinationIdentifiers returns the destination port and channel of
 // the IBC denomination, i.e port and channel on canto for the voucher. It
 // returns an error if:
-//  - the denomination is invalid
-//  - the denom trace is not found on the store
-//  - destination port or channel ID are invalid
+//   - the denomination is invalid
+//   - the denom trace is not found on the store
+//   - destination port or channel ID are invalid
 func (k Keeper) GetIBCDenomDestinationIdentifiers(ctx sdk.Context, denom, sender string) (destinationPort, destinationChannel string, err error) {
 	ibcDenom := strings.SplitN(denom, "/", 2)
 	if len(ibcDenom) < 2 {

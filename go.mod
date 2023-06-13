@@ -3,13 +3,13 @@ module github.com/Canto-Network/Canto/v5
 go 1.19
 
 require (
-	github.com/cosmos/ibc-go/v3 v3.2.0
+	github.com/cosmos/ibc-go/v4 v4.3.1
 	github.com/evmos/ethermint v0.19.3
 )
 
 replace (
 	// v0.19.3 has dependency issues that conflict with sdk v0.45.15+
-	github.com/evmos/ethermint => github.com/althea-net/ethermint v0.19.4
+	github.com/evmos/ethermint => github.com/althea-net/ethermint v0.19.5
 	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.27
 )
 
@@ -67,16 +67,13 @@ require (
 	github.com/cockroachdb/pebble v0.0.0-20220817183557-09c6e030a677 // indirect
 	github.com/cockroachdb/redact v1.1.3 // indirect
 	github.com/coinbase/rosetta-sdk-go v0.7.9 // indirect
-	github.com/cometbft/cometbft v0.37.1 // indirect
 	github.com/cometbft/cometbft-db v0.7.0 // indirect
 	github.com/confio/ics23/go v0.9.0 // indirect
 	github.com/cosmos/btcutil v1.0.4 // indirect
 	github.com/cosmos/cosmos-db v0.0.0-20221226095112-f3c38ecb5e32 // indirect
 	github.com/cosmos/cosmos-proto v1.0.0-beta.1 // indirect
-	github.com/cosmos/gogoproto v1.4.3 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
 	github.com/cosmos/iavl v0.19.5 // indirect
-	github.com/cosmos/ibc-go/v4 v4.3.1 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.12.2 // indirect
 	github.com/creachadair/taskgroup v0.3.2 // indirect
 	github.com/danieljoos/wincred v1.1.2 // indirect

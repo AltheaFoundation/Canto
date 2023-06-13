@@ -3,9 +3,9 @@ package recovery
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
-	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
-	porttypes "github.com/cosmos/ibc-go/v3/modules/core/05-port/types"
-	"github.com/cosmos/ibc-go/v3/modules/core/exported"
+	channeltypes "github.com/cosmos/ibc-go/v4/modules/core/04-channel/types"
+	porttypes "github.com/cosmos/ibc-go/v4/modules/core/05-port/types"
+	"github.com/cosmos/ibc-go/v4/modules/core/exported"
 
 	"github.com/Canto-Network/Canto/v5/ibc"
 	"github.com/Canto-Network/Canto/v5/x/recovery/keeper"
@@ -18,6 +18,11 @@ var _ porttypes.Middleware = &IBCMiddleware{}
 type IBCMiddleware struct {
 	*ibc.Module
 	keeper keeper.Keeper
+}
+
+// GetAppVersion implements types.Middleware.
+func (im *IBCMiddleware) GetAppVersion(ctx sdk.Context, portID string, channelID string) (string, bool) {
+	return im.keeper.GetAppVersion(ctx, portID, channelID)
 }
 
 // NewIBCMiddleware creates a new IBCMiddleware given the keeper and underlying application
