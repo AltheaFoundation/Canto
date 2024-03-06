@@ -105,6 +105,8 @@ github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d/go.mod h1:rBZYJk5
 github.com/allegro/bigcache v1.2.1-0.20190218064605-e24eb225f156/go.mod h1:Cb/ax3seSYIx7SuZdm2G2xzfwmv3TPSk2ucNfQESPXM=
 github.com/allegro/bigcache v1.2.1 h1:hg1sY1raCwic3Vnsvje6TT7/pnZba83LeFck5NrFKSc=
 github.com/allegro/bigcache v1.2.1/go.mod h1:Cb/ax3seSYIx7SuZdm2G2xzfwmv3TPSk2ucNfQESPXM=
+github.com/althea-net/ethermint v0.19.5-fix h1:PuHOBIFrgi7BH3pok7tnJ3rSFC9HtfxjGGJWPU55bgM=
+github.com/althea-net/ethermint v0.19.5-fix/go.mod h1:D1Jfhqtrb0q12IQLLB6w0jfjcSl/EMRCR3VKJVVPXSM=
 github.com/althea-net/ethermint v0.19.5 h1:w2s8tIGL4z+XzQKK+NbQ69txzRA7xfqlXmKHUptKWBM=
 github.com/althea-net/ethermint v0.19.5/go.mod h1:D1Jfhqtrb0q12IQLLB6w0jfjcSl/EMRCR3VKJVVPXSM=
 github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883/go.mod h1:rCTlJbsFo29Kk6CurOXKm700vrz8f0KW0JNfpkRJY/8=

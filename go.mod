@@ -4,12 +4,12 @@ go 1.19
 
 require (
 	github.com/cosmos/ibc-go/v4 v4.3.1
-	github.com/evmos/ethermint v0.19.3
+	github.com/evmos/ethermint v0.19.5-fix
 )
 
 replace (
 	// v0.19.3 has dependency issues that conflict with sdk v0.45.15+
-	github.com/evmos/ethermint => github.com/althea-net/ethermint v0.19.5
+	github.com/evmos/ethermint => github.com/althea-net/ethermint v0.19.5-fix
 	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.27
 )
 

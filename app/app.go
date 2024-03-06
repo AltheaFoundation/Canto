@@ -412,7 +412,7 @@ func NewCanto(
 	app.EvmKeeper = evmkeeper.NewKeeper(
 		appCodec, keys[evmtypes.StoreKey], tkeys[evmtypes.TransientKey], app.GetSubspace(evmtypes.ModuleName),
 		app.AccountKeeper, app.BankKeeper, &stakingKeeper, app.FeeMarketKeeper,
-		tracer,
+		tracer, ethermint.ProtoAccountWithAddress,
 	)
 
 	// Create IBC Keeper
