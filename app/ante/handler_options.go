@@ -119,7 +119,7 @@ func newCosmosAnteHandlerEip712(options HandlerOptions) sdk.AnteHandler {
 		ante.NewValidateSigCountDecorator(options.AccountKeeper),
 		ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),
 		// Note: signature verification uses EIP instead of the cosmos signature validator
-		ethante.NewEip712SigVerificationDecorator(options.AccountKeeper, options.SignModeHandler),
+		ethante.NewEip712SigVerificationDecorator(options.AccountKeeper, options.SignModeHandler, ""), // pass no chain id to have it parsed from the Cosmos chain id
 		ante.NewIncrementSequenceDecorator(options.AccountKeeper),
 		ibcante.NewAnteDecorator(options.IBCKeeper),
 		ethante.NewGasWantedDecorator(options.EvmKeeper, options.FeeMarketKeeper),
