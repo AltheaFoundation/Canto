@@ -8,13 +8,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
-	transfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
-	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
-
-	"github.com/Canto-Network/Canto/v5/x/recovery/types"
+	transfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v6/modules/core/02-client/types"
 )
-
-var _ types.TransferKeeper = &MockTransferKeeper{}
 
 // MockTransferKeeper defines a mocked object that implements the TransferKeeper
 // interface. It's used on tests to abstract the complexity of IBC transfers.

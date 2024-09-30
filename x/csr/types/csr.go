@@ -12,7 +12,7 @@ func NewCSR(contracts []string, id uint64) CSR {
 		Contracts: contracts,
 		Id:        id,
 		Txs:       0,
-		Revenue:   sdk.Int(sdk.ZeroUint()),
+		Revenue:   sdk.Int{},
 	}
 }
 

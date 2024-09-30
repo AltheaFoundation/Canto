@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/server"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -23,10 +21,8 @@ import (
 	ethermint "github.com/evmos/ethermint/types"
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
 
-	cantokr "github.com/Canto-Network/Canto/v5/crypto/keyring"
-
-	vestingcli "github.com/Canto-Network/Canto/v5/x/vesting/client/cli"
-	vestingtypes "github.com/Canto-Network/Canto/v5/x/vesting/types"
+	vestingcli "github.com/Canto-Network/Canto/v6/x/vesting/client/cli"
+	vestingtypes "github.com/Canto-Network/Canto/v6/x/vesting/types"
 )
 
 const (
@@ -52,34 +48,18 @@ contain valid denominations. Accounts may optionally be supplied with vesting pa
 
 			config.SetRoot(clientCtx.HomeDir)
 
-			var kr keyring.Keyring
+			kr := clientCtx.Keyring
 			addr, err := sdk.AccAddressFromBech32(args[0])
 			if err != nil {
-				inBuf := bufio.NewReader(cmd.InOrStdin())
-				keyringBackend, _ := cmd.Flags().GetString(flags.FlagKeyringBackend)
-
-				if keyringBackend != "" && clientCtx.Keyring == nil {
-					var err error
-					kr, err = keyring.New(
-						sdk.KeyringServiceName(),
-						keyringBackend,
-						clientCtx.HomeDir,
-						inBuf,
-						cantokr.Option(),
-					)
-					if err != nil {
-						return err
-					}
-				} else {
-					kr = clientCtx.Keyring
-				}
-
 				info, err := kr.Key(args[0])
 				if err != nil {
 					return fmt.Errorf("failed to get address from Keyring: %w", err)
 				}
 
-				addr = info.GetAddress()
+				addr, err = info.GetAddress()
+				if err != nil {
+					return err
+				}
 			}
 
 			coins, err := sdk.ParseCoinsNormalized(args[1])

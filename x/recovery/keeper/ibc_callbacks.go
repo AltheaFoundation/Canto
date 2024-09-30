@@ -10,15 +10,15 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestexported "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
 
-	transfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
-	clienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v4/modules/core/04-channel/types"
-	host "github.com/cosmos/ibc-go/v4/modules/core/24-host"
-	"github.com/cosmos/ibc-go/v4/modules/core/exported"
+	transfertypes "github.com/cosmos/ibc-go/v6/modules/apps/transfer/types"
+	clienttypes "github.com/cosmos/ibc-go/v6/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v6/modules/core/04-channel/types"
+	host "github.com/cosmos/ibc-go/v6/modules/core/24-host"
+	"github.com/cosmos/ibc-go/v6/modules/core/exported"
 
-	"github.com/Canto-Network/Canto/v5/ibc"
-	canto "github.com/Canto-Network/Canto/v5/types"
-	"github.com/Canto-Network/Canto/v5/x/recovery/types"
+	"github.com/Canto-Network/Canto/v6/ibc"
+	canto "github.com/Canto-Network/Canto/v6/types"
+	"github.com/Canto-Network/Canto/v6/x/recovery/types"
 )
 
 // OnRecvPacket performs an IBC receive callback. It returns the tokens that
@@ -129,15 +129,18 @@ func (k Keeper) OnRecvPacket(
 		timeout := uint64(ctx.BlockTime().Add(params.PacketTimeoutDuration).UnixNano())
 
 		// Recover the tokens to the bech32 prefixed address of the source chain
-		err = k.transferKeeper.SendTransfer(
+		_, err = k.transferKeeper.Transfer(
 			ctx,
-			packet.DestinationPort,    // packet destination port is now the source
-			packet.DestinationChannel, // packet destination channel is now the source
-			coin,                      // balance of the coin
-			recipient,                 // recipient is the address in the canto chain
-			senderBech32,              // transfer to your own account address on the source chain
-			clienttypes.ZeroHeight(),  // timeout height disabled
-			timeout,                   // timeout timestamp is 4 hours from now
+			transfertypes.NewMsgTransfer(
+				packet.DestinationPort,    // packet destination port is now the source
+				packet.DestinationChannel, // packet destination channel is now the source
+				coin,                      // balance of the coin
+				recipient.String(),        // recipient is the address in the canto chain
+				senderBech32,              // transfer to your own account address on the source chain
+				clienttypes.ZeroHeight(),  // timeout height disabled
+				timeout,                   // timeout timestamp is 4 hours from now
+				"",                        // memo is unimportant
+			),
 		)
 
 		if err != nil {

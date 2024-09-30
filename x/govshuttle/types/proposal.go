@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 )
 
 const (
@@ -19,12 +19,10 @@ var (
 	_ govtypes.Content = &TreasuryProposal{}
 )
 
-//Register Compound Proposal type as a valid proposal type in goveranance module
+// Register Compound Proposal type as a valid proposal type in goveranance module
 func init() {
 	govtypes.RegisterProposalType(ProposalTypeLendingMarket)
 	govtypes.RegisterProposalType(ProposalTypeTreasury)
-	govtypes.RegisterProposalTypeCodec(&LendingMarketProposal{}, "govshuttle/LendingMarketProposal")
-	govtypes.RegisterProposalTypeCodec(&TreasuryProposal{}, "govshuttle/TreasuryProposal")
 }
 
 func NewLendingMarketProposal(title, description string, m *LendingMarketMetadata) govtypes.Content {
@@ -65,11 +63,11 @@ func (lm *LendingMarketProposal) ValidateBasic() error {
 	cd, vals, sigs := len(m.GetCalldatas()), len(m.GetValues()), len(m.GetSignatures())
 
 	if cd != vals {
-		return sdkerrors.Wrapf(govtypes.ErrInvalidProposalContent, "proposal array arguments must be same length")
+		return sdkerrors.Wrapf(govtypes.ErrInvalidLengthGenesis, "proposal array arguments must be same length")
 	}
 
 	if vals != sigs {
-		return sdkerrors.Wrapf(govtypes.ErrInvalidProposalContent, "proposal array arguments must be same length")
+		return sdkerrors.Wrapf(govtypes.ErrInvalidLengthGenesis, "proposal array arguments must be same length")
 	}
 	return nil
 }
@@ -83,7 +81,7 @@ func (tp *TreasuryProposal) ValidateBasic() error {
 	s := strings.ToLower(tm.GetDenom())
 
 	if s != "canto" && s != "note" {
-		return sdkerrors.Wrapf(govtypes.ErrInvalidProposalContent, "%s is not a valid denom string", tm.GetDenom())
+		return sdkerrors.Wrapf(govtypes.ErrInvalidLengthGenesis, "%s is not a valid denom string", tm.GetDenom())
 	}
 
 	return nil

@@ -9,14 +9,13 @@ import (
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
-	transfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
-	porttypes "github.com/cosmos/ibc-go/v4/modules/core/05-port/types"
-	"github.com/cosmos/ibc-go/v4/modules/core/exported"
+	transferkeeper "github.com/cosmos/ibc-go/v6/modules/apps/transfer/keeper"
+	clienttypes "github.com/cosmos/ibc-go/v6/modules/core/02-client/types"
+	porttypes "github.com/cosmos/ibc-go/v6/modules/core/05-port/types"
+	"github.com/cosmos/ibc-go/v6/modules/core/exported"
 
-	"github.com/Canto-Network/Canto/v5/x/recovery/types"
+	"github.com/Canto-Network/Canto/v6/x/recovery/types"
 )
-
-var _ transfertypes.ICS4Wrapper = Keeper{}
 
 // Keeper struct
 type Keeper struct {
@@ -25,7 +24,7 @@ type Keeper struct {
 	bankKeeper     types.BankKeeper
 	ics4Wrapper    porttypes.ICS4Wrapper
 	channelKeeper  types.ChannelKeeper
-	transferKeeper types.TransferKeeper
+	transferKeeper transferkeeper.Keeper
 }
 
 // NewKeeper returns keeper
@@ -34,7 +33,7 @@ func NewKeeper(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	ck types.ChannelKeeper,
-	tk types.TransferKeeper,
+	tk transferkeeper.Keeper,
 ) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
@@ -50,7 +49,7 @@ func NewKeeper(
 	}
 }
 
-func (k *Keeper) SetTransferKeeper(tk types.TransferKeeper) {
+func (k *Keeper) SetTransferKeeper(tk transferkeeper.Keeper) {
 	k.transferKeeper = tk
 }
 
@@ -77,8 +76,16 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 
 // SendPacket implements the ICS4Wrapper interface from the transfer module.
 // It calls the underlying SendPacket function directly to move down the middleware stack.
-func (k Keeper) SendPacket(ctx sdk.Context, channelCap *capabilitytypes.Capability, packet exported.PacketI) error {
-	return k.ics4Wrapper.SendPacket(ctx, channelCap, packet)
+func (k Keeper) SendPacket(
+	ctx sdk.Context,
+	chanCap *capabilitytypes.Capability,
+	sourcePort string,
+	sourceChannel string,
+	timeoutHeight clienttypes.Height,
+	timeoutTimestamp uint64,
+	data []byte,
+) (sequence uint64, err error) {
+	return k.ics4Wrapper.SendPacket(ctx, chanCap, sourcePort, sourceChannel, clienttypes.Height{RevisionHeight: timeoutHeight.GetRevisionHeight(), RevisionNumber: timeoutHeight.GetRevisionNumber()}, timeoutTimestamp, data)
 }
 
 // WriteAcknowledgement implements the ICS4Wrapper interface from the transfer module.

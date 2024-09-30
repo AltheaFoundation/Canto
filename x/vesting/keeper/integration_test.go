@@ -7,9 +7,9 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/Canto-Network/Canto/v5/app"
-	"github.com/Canto-Network/Canto/v5/app/ante"
-	"github.com/Canto-Network/Canto/v5/testutil"
+	"github.com/Canto-Network/Canto/v6/app"
+	"github.com/Canto-Network/Canto/v6/app/ante"
+	"github.com/Canto-Network/Canto/v6/testutil"
 	"github.com/evmos/ethermint/encoding"
 	"github.com/evmos/ethermint/tests"
 
@@ -22,7 +22,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
 
-	"github.com/Canto-Network/Canto/v5/x/vesting/types"
+	"github.com/Canto-Network/Canto/v6/x/vesting/types"
 )
 
 // Clawback vesting with Cliff and Lock. In this case the cliff is reached
@@ -372,7 +372,7 @@ var _ = Describe("Clawback Vesting Accounts - claw back tokens", Ordered, func()
 		vesting = clawbackAccount.GetVestingCoins(s.ctx.BlockTime())
 		expVestedAmount := amt.Mul(sdk.NewInt(lockup))
 		expVested := sdk.NewCoins(sdk.NewCoin(stakeDenom, expVestedAmount))
-		unvested := vestingAmtTotal.Sub(vested)
+		unvested := vestingAmtTotal.Sub(vested...)
 		s.Require().Equal(free, vested)
 		s.Require().Equal(expVested, vested)
 		s.Require().True(expVestedAmount.GT(sdk.NewInt(0)))
@@ -409,7 +409,7 @@ var _ = Describe("Clawback Vesting Accounts - claw back tokens", Ordered, func()
 		free = clawbackAccount.GetVestedCoins(s.ctx.BlockTime())
 		vesting = clawbackAccount.GetVestingCoins(s.ctx.BlockTime())
 		expVested := sdk.NewCoins(sdk.NewCoin(stakeDenom, amt.Mul(sdk.NewInt(periodsTotal))))
-		unvested := vestingAmtTotal.Sub(vested)
+		unvested := vestingAmtTotal.Sub(vested...)
 		s.Require().Equal(free, vested)
 		s.Require().Equal(expVested, vested)
 		s.Require().Equal(expVested, vestingAmtTotal)

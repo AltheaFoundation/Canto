@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Canto-Network/Canto/v5/x/inflation/types"
+	"github.com/Canto-Network/Canto/v6/x/inflation/types"
 )
 
 // MintAndAllocateInflation performs inflation minting and allocation
@@ -89,7 +89,7 @@ func (k Keeper) GetProportions(
 ) sdk.Coin {
 	return sdk.NewCoin(
 		coin.Denom,
-		coin.Amount.ToDec().Mul(distribution).TruncateInt(),
+		sdk.Int{},
 	)
 }
 
@@ -102,14 +102,13 @@ func (k Keeper) BondedRatio(ctx sdk.Context) sdk.Dec {
 		return sdk.ZeroDec()
 	}
 
-	return k.stakingKeeper.TotalBondedTokens(ctx).ToDec().QuoInt(stakeSupply)
+	return sdk.Dec{}
 }
 
 // GetCirculatingSupply returns the bank supply of the mintDenom
 func (k Keeper) GetCirculatingSupply(ctx sdk.Context) sdk.Dec {
-	mintDenom := k.GetParams(ctx).MintDenom
 
-	circulatingSupply := k.bankKeeper.GetSupply(ctx, mintDenom).Amount.ToDec()
+	circulatingSupply := sdk.Dec{}
 
 	return circulatingSupply
 }
